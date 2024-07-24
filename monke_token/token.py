@@ -31,3 +31,13 @@ class TokenType:
 class Token:
     type: str
     literal: str
+
+
+keywords = {
+    "fn": TokenType.FUNCTION,
+    "let": TokenType.LET,
+}
+
+
+def look_up_indent(indent):
+    return keywords.get(indent, TokenType.IDENT)

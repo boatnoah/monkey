@@ -1,4 +1,4 @@
-from monke_token.token import Token, TokenType
+from monke_token.token import Token, TokenType, look_up_indent
 
 
 class Lexer:
@@ -18,8 +18,9 @@ class Lexer:
         self.position = self.read_position
         self.read_position += 1
 
-    def next_token(self):
+    def next_token(self) -> Token:
         self.skip_whitespace()
+
         if self.ch == "=":
             tok = Token(TokenType.ASSIGN, self.ch)
         elif self.ch == "+":
@@ -39,7 +40,16 @@ class Lexer:
         elif self.ch == "\0":
             tok = Token(TokenType.EOF, "")
         else:
-            tok = Token(TokenType.ILLEGAL, self.ch)
+            if self.ch.isalpha() or self.ch == "_":
+                literal = self.read_identifier()
+                token_type = look_up_indent(literal)
+                tok = Token(token_type, literal)
+                return tok
+            elif self.ch.isdigit():
+                tok = Token(TokenType.INT, self.read_number())
+                return tok
+            else:
+                tok = Token(TokenType.ILLEGAL, self.ch)
 
         self.read_char()
         return tok
@@ -47,3 +57,17 @@ class Lexer:
     def skip_whitespace(self):
         while self.ch in (" ", "\t", "\n", "\r"):
             self.read_char()
+
+    def read_number(self) -> str:
+        position = self.position
+        while self.ch.isdigit():
+            self.read_char()
+
+        return self.input_data[position : self.position]
+
+    def read_identifier(self) -> str:
+        position = self.position
+        while self.ch.isalpha():
+            self.read_char()
+
+        return self.input_data[position : self.position]
