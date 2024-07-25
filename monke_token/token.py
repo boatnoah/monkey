@@ -13,6 +13,16 @@ class TokenType:
     # Operators
     ASSIGN = "="
     PLUS = "+"
+    MINUS = "-"
+    BANG = "!"
+    ASTERISK = "*"
+    SLASH = "/"
+
+    EQ = "=="
+    NOT_EQ = "!="
+
+    LT = "<"
+    GT = ">"
 
     # Delimiters
     COMMA = ","
@@ -25,6 +35,11 @@ class TokenType:
     # Keywords
     FUNCTION = "FUNCTION"
     LET = "LET"
+    TRUE = "TRUE"
+    FALSE = "FALSE"
+    IF = "IF"
+    ELSE = "ELSE"
+    RETURN = "RETURN"
 
 
 @dataclass
@@ -36,8 +51,13 @@ class Token:
 keywords = {
     "fn": TokenType.FUNCTION,
     "let": TokenType.LET,
+    "true": TokenType.TRUE,
+    "false": TokenType.FALSE,
+    "if": TokenType.IF,
+    "else": TokenType.ELSE,
+    "return": TokenType.RETURN,
 }
 
 
-def look_up_indent(indent):
+def look_up_indent(indent): 
     return keywords.get(indent, TokenType.IDENT)

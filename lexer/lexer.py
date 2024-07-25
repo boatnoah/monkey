@@ -22,9 +22,31 @@ class Lexer:
         self.skip_whitespace()
 
         if self.ch == "=":
-            tok = Token(TokenType.ASSIGN, self.ch)
+            if self.peek_char() == "=":
+                ch = self.ch
+                self.read_char()
+                tok = Token(TokenType.EQ, ch + self.ch)
+            else:
+                tok = Token(TokenType.ASSIGN, self.ch)
         elif self.ch == "+":
             tok = Token(TokenType.PLUS, self.ch)
+        elif self.ch == "-":
+            tok = Token(TokenType.MINUS, self.ch)
+        elif self.ch == "!":
+            if self.peek_char() == "=":
+                ch = self.ch
+                self.read_char()
+                tok = Token(TokenType.NOT_EQ, ch + self.ch)
+            else:
+                tok = Token(TokenType.BANG, self.ch)
+        elif self.ch == "/":
+            tok = Token(TokenType.SLASH, self.ch)
+        elif self.ch == "*":
+            tok = Token(TokenType.ASTERISK, self.ch)
+        elif self.ch == "<":
+            tok = Token(TokenType.LT, self.ch)
+        elif self.ch == ">":
+            tok = Token(TokenType.GT, self.ch)
         elif self.ch == "(":
             tok = Token(TokenType.LPAREN, self.ch)
         elif self.ch == ")":
@@ -57,6 +79,12 @@ class Lexer:
     def skip_whitespace(self):
         while self.ch in (" ", "\t", "\n", "\r"):
             self.read_char()
+
+    def peek_char(self):
+        if self.read_position >= len(self.input_data):
+            return 0
+        else:
+            return self.input_data[self.read_position]
 
     def read_number(self) -> str:
         position = self.position
