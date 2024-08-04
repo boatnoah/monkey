@@ -2,7 +2,7 @@ import unittest
 
 from lexer.lexer import Lexer
 from monke_ast.monke_ast import LetStatement
-from monke_parser.parser import Parser, new
+from monke_parser.parser import new
 
 
 class TestLetStatements(unittest.TestCase):
@@ -25,9 +25,9 @@ class TestLetStatements(unittest.TestCase):
 
         for i, expected_identifier in enumerate(expected_identifiers):
             stmt = program.statements[i]
-            self.assertTrue(self.test_let_statement(stmt, expected_identifier))
+            self.assertTrue(self.check_let_statement(stmt, expected_identifier))
 
-    def test_let_statement(self, statement, name):
+    def check_let_statement(self, statement, name):
         self.assertEqual(
             statement.token_literal(),
             "let",

@@ -1,15 +1,19 @@
 from abc import ABC, abstractmethod
+
 from monke_token.token import Token
+
 
 class Node(ABC):
     @abstractmethod
     def token_literal(self) -> str:
         pass
 
+
 class Statement(Node):
     @abstractmethod
     def statement_node(self):
         pass
+
 
 class Expression(Node):
     @abstractmethod
@@ -27,10 +31,11 @@ class Program:
         else:
             return ""
 
+
 class LetStatement(Statement):
-    def __init__(self, token, name, value):
+    def __init__(self, token, name=None, value=None):
         self.token = token  # the token.LET token
-        self.name = name    # Identifier
+        self.name = name  # Identifier
         self.value = value  # Expression
 
     def statement_node(self):
@@ -38,6 +43,7 @@ class LetStatement(Statement):
 
     def token_literal(self) -> str:
         return self.token.literal
+
 
 class Identifier(Expression):
     def __init__(self, token, value):
