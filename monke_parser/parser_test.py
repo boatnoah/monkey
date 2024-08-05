@@ -2,7 +2,7 @@ import unittest
 
 from lexer.lexer import Lexer
 from monke_ast.monke_ast import LetStatement
-from monke_parser.parser import new
+from monke_parser.parser import Parser, new
 
 
 class TestLetStatements(unittest.TestCase):
@@ -10,11 +10,12 @@ class TestLetStatements(unittest.TestCase):
         input_data = """
         let x = 5;
         let y = 10;
-        let foobar = 838383;
+        let 838383;
         """
         lexer = Lexer(input_data)
         parser = new(lexer)
         program = parser.parse_program()
+        self.check_parser_errors(parser)
         self.assertIsNotNone(program, "parse_program() returned None")
         self.assertEqual(
             len(program.statements),
@@ -53,6 +54,17 @@ class TestLetStatements(unittest.TestCase):
         )
 
         return True
+
+    def check_parser_errors(self, p: Parser):
+        errors = p.get_errors()
+
+        if not errors:
+            return
+
+        self.fail(
+            f"parser has {len(errors)} errors:\n"
+            + "\n".join(f"parser error: {msg}" for msg in errors)
+        )
 
 
 if __name__ == "__main__":
